@@ -10,22 +10,17 @@
     "format": "prettier --write .",
     "lint": "npm run lint:eslint && npm run lint:prettier",
     "lint:eslint": "eslint src/**/*.ts",
-    "lint:prettier": "prettier --check .",
-    "db:up": "docker compose -f docker/db.compose.yml up -d",
-    "db:down": "docker compose -f docker/db.compose.yml down",
-    "db:logs": "docker compose -f docker/db.compose.yml logs -f"
+    "lint:prettier": "prettier --check ."
   },
   "author": "Kan-A-Pesh",
   "private": true,
   "dependencies": {
     "dotenv": "^16.4.7",
-    "redis": "^4.7.0",
     "winston": "^3.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@types/node": "^24.0.10",
-    "@types/redis": "^4.0.10",
     "@types/winston": "^2.4.4",
     "eslint": "^8.57.1",
     "eslint-config-standard": "^17.1.0",
