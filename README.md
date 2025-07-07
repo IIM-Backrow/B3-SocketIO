@@ -1,57 +1,47 @@
-# Connect 4 Game with SocketIO and Camera Hand Tracking
+# 🚀 Socket.IO Full-Stack Project
 
-A Connect 4 game that allows players to control game moves using hand gestures captured through a camera, powered by SocketIO for real-time multiplayer functionality.
+A comprehensive full-stack application showcasing real-time communication with Socket.IO, featuring a modern frontend and a robust Express backend with clean architecture.
 
-## Features
+## 🌟 Project Overview
 
-- Real-time multiplayer gameplay using Socket.IO
-- Hand gesture recognition for game control
-- Responsive game board interface
-- Live player status and game state updates
-- Cross-browser and cross-device compatibility
+This project demonstrates a complete Socket.IO implementation with:
 
-## Technologies Used
+- **🎨 Frontend**: Interactive user interface with real-time capabilities
+- **⚡ Backend**: Express server with Socket.IO, TypeScript, and clean architecture
+- **🔗 Real-time Communication**: Seamless bidirectional communication between client and server
+- **📘 Type Safety**: Shared TypeScript types across the entire stack
 
-- **Frontend**: HTML, CSS, JavaScript
-- **Backend**: Node.js, Express
-- **Real-time Communication**: Socket.IO
-- **Computer Vision**: TensorFlow.js, MediaPipe for hand tracking
+## 🏗️ Project Structure
 
-## Getting Started
+```
+B3-SocketIO/
+├── 🎨 frontend/              # Frontend application
+├── ⚡ backend/               # Express/Socket.IO backend
+├── 🔗 shared/               # Shared TypeScript types
+└── 📚 docs/                # Complete documentation
+    ├── backend/            # Backend-specific docs
+    └── frontend/           # Frontend-specific docs
+```
 
-### Prerequisites
+## 🚀 Quick Start
 
-- Node.js (v14 or higher)
-- NPM or Yarn
-- Webcam
+1. **Backend**: See [Backend Documentation](./docs/backend/README.md) for setup and development
+2. **Frontend**: See [Frontend Documentation](./docs/frontend/README.md) for setup and features
+3. **Full Documentation**: Browse the [Documentation Index](./docs/README.md) for comprehensive guides
 
-### Installation
+## 📚 Documentation
 
-1. Clone the repository
-    ```
-    git clone https://github.com/yourusername/connect4-socketio-hand-tracking.git
-    cd connect4-socketio-hand-tracking
-    ```
+- **[📖 Documentation Index](./docs/README.md)** - Navigate all documentation by component
+- **[🎨 Frontend Guide](./docs/frontend/README.md)** - Frontend setup and features
+- **[⚡ Backend Guide](./docs/backend/README.md)** - Backend architecture and development
 
-2. Install dependencies
-    ```
-    npm install
-    ```
+## 🤝 Contributing
 
-3. Start the server
-    ```
-    npm start
-    ```
+1. Review the [project documentation](./docs/README.md)
+2. Follow the architecture patterns for your component (frontend/backend)
+3. Ensure code quality with linting and type checking
+4. Test real-time features across both frontend and backend
 
-4. Open your browser and navigate to `http://localhost:3000`
+## 📄 License
 
-## How to Play
-
-1. Allow camera access when prompted
-2. Position your hand in front of the camera
-3. Use the following gestures to control the game:
-    - Move your hand left/right to select a column
-    - Close your fist to drop a piece in the selected column
-    - Wave to reset the game (when a game is over)
-
-## Project Structure
+This project is for educational purposes as part of the IIM B3 curriculum.
