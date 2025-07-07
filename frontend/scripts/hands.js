@@ -23,13 +23,11 @@ class HandTracker {
   }
 
   draw() {
-    // Remove hand elements that are no longer in the physical hands
     while (this.handsElement.length > this.physicalHands.length) {
       this.handsElement[this.handsElement.length - 1].remove();
       this.handsElement.pop();
     }
 
-    // Add new hand elements
     while (this.handsElement.length < this.physicalHands.length) {
       const handElement = document.createElement("div");
       handElement.classList.add("hand");
@@ -50,29 +48,20 @@ class HandTracker {
   }
 
   gotHands(hands) {
-    // image(this.video, 0, 0, width, height);
     background(255);
 
     this.physicalHands = hands.map((hand) => {
-      // Filter and draw only thumb and index finger tips
       const keypoints = hand.keypoints;
       const fingertips = keypoints.filter(
         (keypoint) =>
           keypoint.name === "index_finger_tip" || keypoint.name === "thumb_tip"
       );
 
-      // Show keypoints
-      // fingertips.forEach((keypoint) => {
-      //   ellipse(keypoint.x, keypoint.y, 10, 10);
-      // });
-
-      // Calculate distance between thumb and index finger
       const thumb =
         keypoints.find((k) => k.name === "thumb_tip") || keypoints[4];
       const index =
         keypoints.find((k) => k.name === "index_finger_tip") || keypoints[8];
 
-      // Calculate distance using reduce
       const distanceSq = [
         { coord: "x", diff: index.x - thumb.x },
         { coord: "y", diff: index.y - thumb.y },

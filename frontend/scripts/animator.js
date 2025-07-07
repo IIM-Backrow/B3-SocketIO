@@ -34,7 +34,11 @@ function startWinAnimation(color) {
   const restartButton = document.createElement("button");
   restartButton.textContent = "Restart";
   restartButton.addEventListener("click", () => {
-    window.location.reload();
+    if (typeof restartGame === 'function' && typeof gameState !== 'undefined' && gameState.gameId) {
+      restartGame();
+    } else {
+      window.location.reload();
+    }
   });
   winElement.appendChild(restartButton);
 

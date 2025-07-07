@@ -3,12 +3,10 @@ class Board {
     this.board = [];
     this.currentPlayer = 1;
 
-    // Generate dom
     this.boardContainer = document.createElement("div");
     this.boardContainer.classList.add("board");
     document.body.appendChild(this.boardContainer);
 
-    // Generate rows
     for (let i = 0; i < 7; i++) {
       const row = document.createElement("div");
       row.classList.add("row");
@@ -18,7 +16,6 @@ class Board {
         cells: [],
       });
 
-      // Generate cells
       for (let j = 0; j < 6; j++) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
@@ -32,6 +29,17 @@ class Board {
   }
 
   tryAddPiece(col) {
+    if (typeof gameState !== 'undefined' && gameState.isConnected && gameState.playerNumber) {
+      if (gameState.currentPlayer !== gameState.playerNumber) {
+        console.log("Not your turn!");
+        return;
+      }
+      if (typeof placePiece === 'function') {
+        placePiece(col);
+      }
+      return;
+    }
+
     if (this.currentPlayer === 0) return;
     const index = this.board[col].cells.findIndex(
       (cell) => cell.value === null
@@ -49,14 +57,12 @@ class Board {
       this.currentPlayer === 1 ? "blue" : "red"
     );
 
-    // Calculate the fall distance
     const fallDistance =
       this.board[col].cells.filter((cell) => cell.value === null).length + 2;
     cellContent.style.setProperty("--fall-cells", fallDistance);
 
     cell.element.appendChild(cellContent);
 
-    // Set the current player to 0 to prevent adding another piece
     const currentPlayerTmp = this.currentPlayer;
     this.currentPlayer = 0;
 
@@ -69,11 +75,9 @@ class Board {
       return;
     }
 
-    // Start the turn animation
     setTimeout(() => {
       startTurnAnimation(currentPlayerTmp === 1 ? "red" : "blue");
 
-      // Wait for the animation to set turn
       setTimeout(() => {
         this.currentPlayer = currentPlayerTmp === 1 ? 2 : 1;
       }, 1000);
@@ -81,7 +85,6 @@ class Board {
   }
 
   checkWin(col, row) {
-    // return a boolean of the win state
     const ca = {
       x: col,
       y: row,
@@ -127,7 +130,11 @@ placeholder.style.display = "none";
 document.body.appendChild(placeholder);
 
 handTracker.onHandsMove((hands) => {
-  if (hands.length === 0 || board.currentPlayer === 0) {
+  const isLocalGame = board.currentPlayer !== 0;
+  const isMultiplayerGame = typeof gameState !== 'undefined' && gameState.isConnected && gameState.playerNumber;
+  const isMyTurn = !isMultiplayerGame || (gameState.currentPlayer === gameState.playerNumber);
+
+  if (hands.length === 0 || (!isLocalGame && !isMultiplayerGame) || !isMyTurn) {
     placeholder.style.display = "none";
     return;
   }
@@ -137,7 +144,6 @@ handTracker.onHandsMove((hands) => {
   const hand = hands[0];
   const { position, isContact } = hand;
 
-  // Get the closest column
   const col = board.board.reduce(
     (prev, curr, index) => {
       const elementCenterX =
@@ -153,19 +159,18 @@ handTracker.onHandsMove((hands) => {
   );
 
   if (isContact && !wasHandPressed) {
-    // Contact down event
     wasHandPressed = true;
   }
 
   if (!isContact && wasHandPressed) {
-    // Contact up event
     wasHandPressed = false;
     board.tryAddPiece(col.index);
   }
 
+  const currentPlayerForColor = isMultiplayerGame ? gameState.playerNumber : board.currentPlayer;
   placeholder.style.setProperty(
     "--cell-color",
-    board.currentPlayer === 1 ? "blue" : "red"
+    currentPlayerForColor === 1 ? "blue" : "red"
   );
   placeholder.style.left = `${col.elementCenterX}px`;
 });
