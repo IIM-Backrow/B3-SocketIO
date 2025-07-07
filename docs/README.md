@@ -1,46 +1,51 @@
-# Documentation
+# 📚 Project Documentation
 
-Complete documentation for the Socket.IO project with Express backend.
+This directory contains comprehensive documentation for the Socket.IO project, organized by frontend and backend components.
 
-## Quick Start
+## 📁 Documentation Structure
 
-- **[Getting Started](./getting-started.md)** - Installation, setup, and basic usage
+### 🗂️ Backend Documentation (`/backend`)
 
-## Architecture
+Complete backend documentation including Socket.IO server, Express REST API, and architecture:
 
-- **[Architecture Overview](./architecture.md)** - Project structure and design principles
+- **[📖 Backend README](./backend/README.md)** - Backend-specific overview and quick start
+- **[🏗️ Architecture](./backend/architecture.md)** - Project structure and design principles
+- **[🚀 Getting Started](./backend/getting-started.md)** - Installation and setup guide
+- **[🌐 Express Routes](./backend/express-routes.md)** - REST API development guide
+- **[🔌 Socket Events](./backend/socket-events.md)** - Socket.IO event handling guide
+- **[⚠️ Error Handling](./backend/error-handling.md)** - Error management system
+- **[📝 Logging](./backend/logging.md)** - Winston logging system guide
 
-## Development Guides
+### 🗂️ Frontend Documentation (`/frontend`)
 
-- **[Express Routes](./express-routes.md)** - How to create REST API endpoints
-- **[Socket Events](./socket-events.md)** - How to create Socket.IO event handlers
+Frontend-specific documentation:
 
-## System Documentation
+- **[📖 Frontend README](./frontend/README.md)** - Frontend overview and setup
 
-- **[Error Handling](./error-handling.md)** - Centralized error management system
-- **[Logging](./logging.md)** - Feature-based logging with Winston
+## 📋 Quick Navigation
 
-## Reading Order
+### 🔧 For Backend Development
 
-### For New Developers
+1. Start with [Backend README](./backend/README.md) for overview
+2. Follow [Getting Started](./backend/getting-started.md) for setup
+3. Review [Architecture](./backend/architecture.md) for project structure
+4. Use guides for [Express Routes](./backend/express-routes.md) and [Socket Events](./backend/socket-events.md)
 
-1. [Getting Started](./getting-started.md) - Set up and run the project
-2. [Architecture Overview](./architecture.md) - Understand the project structure
-3. [Express Routes](./express-routes.md) - Learn to create API endpoints
-4. [Socket Events](./socket-events.md) - Learn to create real-time features
+### 🎨 For Frontend Development
 
-### For System Understanding
+1. Check [Frontend README](./frontend/README.md) for setup and features
 
-1. [Architecture Overview](./architecture.md) - High-level design
-2. [Error Handling](./error-handling.md) - Error management patterns
-3. [Logging](./logging.md) - Observability and debugging
+### 🔗 Full-Stack Development
 
-## Key Concepts
+- Understand both backend and frontend components
+- Review shared types and interfaces used across both layers
+- Follow consistent patterns between client and server code
 
-- **Clean Architecture**: Separation of concerns with clear folder structure
-- **Error Handling**: Centralized error management with consistent responses
-- **Type Safety**: Shared TypeScript types between frontend and backend
-- **Feature Logging**: Structured logging with feature-specific context
-- **Real-time Communication**: Socket.IO with proper event handling patterns
+## 📝 Contributing
 
-Each document is designed to be concise and actionable, focusing on practical implementation rather than theory.
+When adding new documentation:
+
+- Place backend-specific docs in `/backend`
+- Place frontend-specific docs in `/frontend`
+- Keep shared concepts and overviews in this main directory
+- Follow existing formatting and structure patterns
