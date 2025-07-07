@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import { Server as HttpServer } from "http";
 import { createFeatureLogger } from "../../lib/logger";
 import { PingHandler } from "./handlers/ping.handler";
+import { MatchmakingHandler } from "./handlers/matchmaking.handler";
 
 const logger = createFeatureLogger("socket.service");
 
@@ -29,6 +30,10 @@ export class SocketService {
 
       // Register all event handlers
       PingHandler.handlePing(socket);
+      MatchmakingHandler.handleJoinQueue(socket);
+      MatchmakingHandler.handleLeaveQueue(socket);
+      MatchmakingHandler.handlePlacePiece(socket);
+      MatchmakingHandler.handleDisconnect(socket);
 
       // Handle disconnection
       socket.on("disconnect", (reason) => {
@@ -50,5 +55,14 @@ export class SocketService {
 
   public emitToRoom(room: string, event: string, data: unknown): void {
     this.io.to(room).emit(event, data);
+  }
+
+  // Add methods to get matchmaking stats
+  public getQueueSize(): number {
+    return MatchmakingHandler.getQueueSize();
+  }
+
+  public getActiveGamesCount(): number {
+    return MatchmakingHandler.getActiveGamesCount();
   }
 }
