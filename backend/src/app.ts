@@ -5,6 +5,7 @@ import { createFeatureLogger } from "../lib/logger";
 import { SERVER_CONFIG } from "./config/server";
 import { SocketService } from "./socket/socket.service";
 import { statusRoutes } from "./routes/status.routes";
+import { matchmakingRoutes } from "./routes/matchmaking.routes";
 import { errorHandler, notFoundHandler } from "./middleware/error.middleware";
 import { SocketInfoController } from "./controllers/socket-info.controller";
 
@@ -46,6 +47,7 @@ export class App {
 
   private setupRoutes(): void {
     this.app.use("/api/status", statusRoutes);
+    this.app.use("/api/matchmaking", matchmakingRoutes);
     this.app.get("/api/socket/info", this.socketInfoController.getSocketInfo);
   }
 
