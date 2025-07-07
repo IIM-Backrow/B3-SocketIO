@@ -1,0 +1,2 @@
+const MAX_TOUCH_DISTANCE_SQ = 500;
+const REVERSE_X_AXIS = true;
