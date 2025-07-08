@@ -31,7 +31,7 @@ if (savedUsername) {
 }
 
 // Initialize socket connection
-const socket = io("http://localhost:3000");
+const socket = io("https://api-power4.kan-a-pesh.fr");
 
 // Ping functionality
 function updatePingDisplay(latency) {
