@@ -4,6 +4,10 @@ This directory contains comprehensive documentation for the Socket.IO project, o
 
 ## 📁 Documentation Structure
 
+### 🐳 Deployment Documentation
+
+- **[🐳 Docker Setup](./DOCKER.md)** - Complete containerized deployment guide for both backend and frontend
+
 ### 🗂️ Backend Documentation (`/backend`)
 
 Complete backend documentation including Socket.IO server, Express REST API, and architecture:
@@ -23,6 +27,11 @@ Frontend-specific documentation:
 - **[📖 Frontend README](./frontend/README.md)** - Frontend overview and setup
 
 ## 📋 Quick Navigation
+
+### 🐳 For Quick Deployment (Recommended)
+
+1. Use [Docker Setup](./DOCKER.md) for containerized deployment of the entire application
+2. Run both frontend and backend services with a single command
 
 ### 🔧 For Backend Development
 
