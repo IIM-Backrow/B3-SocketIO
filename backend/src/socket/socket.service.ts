@@ -3,8 +3,7 @@ import { Server as HttpServer } from "http";
 import { createFeatureLogger } from "../../lib/logger";
 import { PingHandler } from "./handlers/ping.handler";
 import { MatchmakingHandler } from "./handlers/matchmaking.handler";
-import { PlayerService } from "../services/player.service";
-
+import { UserHandler } from "./handlers/user.handler";
 const logger = createFeatureLogger("socket.service");
 
 export class SocketService {
@@ -35,6 +34,7 @@ export class SocketService {
       MatchmakingHandler.handleLeaveQueue(socket);
       MatchmakingHandler.handlePlacePiece(socket);
       MatchmakingHandler.handleDisconnect(socket);
+      UserHandler.handleLogin(socket);
 
       // Handle disconnection
       socket.on("disconnect", (reason) => {
@@ -42,12 +42,6 @@ export class SocketService {
           socketId: socket.id,
           reason
         });
-      });
-
-      socket.on("login", (username: string) => {
-        const playerService = PlayerService.getInstance();
-        const profile = playerService.getOrCreateProfile(username, socket.id);
-        socket.emit("profile", profile);
       });
     });
   }

@@ -1,5 +1,5 @@
 import { Color, GameState } from "./match";
-
+import { PlayerProfile } from "./player";
 export interface ServerToClientEvents {
   pong: (timestamp: number) => void;
 
@@ -11,7 +11,7 @@ export interface ServerToClientEvents {
   game_end: (winner: Color) => void;
 
 
-  profile: (profile: import("./player").PlayerProfile) => void;
+  profile: (profile: PlayerProfile) => void;
 }
 
 export interface ClientToServerEvents {

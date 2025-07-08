@@ -121,8 +121,8 @@ export class Game {
   }
 
   private getPlayerColor(socketId: string): Color | null {
-      if (socketId === this.match.red_player) return "red";
-      if (socketId === this.match.blue_player) return "blue";
+    if (socketId === this.match.red_player) return "red";
+    if (socketId === this.match.blue_player) return "blue";
     return null;
   }
 
@@ -132,7 +132,7 @@ export class Game {
       this.checkDirection(board, row, col, 0, 1, color) || // Horizontal
       this.checkDirection(board, row, col, 1, 0, color) || // Vertical
       this.checkDirection(board, row, col, 1, 1, color) || // Diagonale \
-      this.checkDirection(board, row, col, 1, -1, color)   // Diagonale /
+      this.checkDirection(board, row, col, 1, -1, color) // Diagonale /
     ) {
       return color;
     }
@@ -151,11 +151,7 @@ export class Game {
     // Sens positif
     let r = row + deltaRow;
     let c = col + deltaCol;
-    while (
-      r >= 0 && r < 6 &&
-      c >= 0 && c < 7 &&
-      board[r][c] === color
-    ) {
+    while (r >= 0 && r < 6 && c >= 0 && c < 7 && board[r][c] === color) {
       count++;
       r += deltaRow;
       c += deltaCol;
@@ -163,11 +159,7 @@ export class Game {
     // Sens négatif
     r = row - deltaRow;
     c = col - deltaCol;
-    while (
-      r >= 0 && r < 6 &&
-      c >= 0 && c < 7 &&
-      board[r][c] === color
-    ) {
+    while (r >= 0 && r < 6 && c >= 0 && c < 7 && board[r][c] === color) {
       count++;
       r -= deltaRow;
       c -= deltaCol;
@@ -182,19 +174,15 @@ export class Game {
     this.updateElo(winner);
     this.cleanup();
   }
-  
+
   private updateElo(winner: Color): void {
     const playerService = PlayerService.getInstance();
     const K = 32;
     const [winnerProfile, loserProfile] =
-      winner === "red"
-        ? [this.redProfile, this.blueProfile]
-        : [this.blueProfile, this.redProfile];
+      winner === "red" ? [this.redProfile, this.blueProfile] : [this.blueProfile, this.redProfile];
 
-    const expectedWin =
-      1 / (1 + Math.pow(10, (loserProfile.elo - winnerProfile.elo) / 400));
-    const expectedLose =
-      1 / (1 + Math.pow(10, (winnerProfile.elo - loserProfile.elo) / 400));
+    const expectedWin = 1 / (1 + Math.pow(10, (loserProfile.elo - winnerProfile.elo) / 400));
+    const expectedLose = 1 / (1 + Math.pow(10, (winnerProfile.elo - loserProfile.elo) / 400));
 
     const newWinnerElo = Math.round(winnerProfile.elo + K * (1 - expectedWin));
     const newLoserElo = Math.round(loserProfile.elo + K * (0 - expectedLose));
