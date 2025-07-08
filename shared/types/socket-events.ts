@@ -10,7 +10,7 @@ export interface ServerToClientEvents {
   game_update: (game_state: GameState) => void;
   game_end: (winner: Color) => void;
 
-
+  // Profile events
   profile: (profile: PlayerProfile) => void;
 }
 
@@ -24,10 +24,12 @@ export interface ClientToServerEvents {
   // Game events
   place_piece: (column: number) => void;
 
+  // Profile events
   login: (username: string) => void;
-
 }
 
 export interface InterServerEvents {}
 
-export interface SocketData {}
+export interface SocketData {
+  username: string;
+}

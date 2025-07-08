@@ -22,31 +22,33 @@ export class Game {
 
   constructor(
     io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,
-    redPlayer: string,
-    bluePlayer: string
+    redPlayerSocketId: string,
+    bluePlayerSocketId: string,
+    redPlayerUsername: string,
+    bluePlayerUsername: string
   ) {
     this.io = io;
     this.roomId = `game-${uuidv4()}`;
 
     const playerService = PlayerService.getInstance();
-    const redProfile = playerService.getProfileBySocket(redPlayer);
-    if (!redProfile) {
-      throw new Error(`Red player profile not found for socket ID: ${redPlayer}`);
-    }
+    const redProfile = playerService.getOrCreateProfile(redPlayerUsername);
     this.redProfile = redProfile;
-    const blueProfile = playerService.getProfileBySocket(bluePlayer);
-    if (!blueProfile) {
-      throw new Error(`Blue player profile not found for socket ID: ${bluePlayer}`);
-    }
+
+    const blueProfile = playerService.getOrCreateProfile(bluePlayerUsername);
     this.blueProfile = blueProfile;
 
     this.match = {
       id: uuidv4(),
-      red_player: redPlayer,
-      blue_player: bluePlayer,
+      red_player: redPlayerSocketId, // Keep socket IDs for game operations
+      blue_player: bluePlayerSocketId,
       game_state: this.createInitialGameState()
     };
-    logger.info("Game created", { gameId: this.match.id, roomId: this.roomId });
+    logger.info("Game created", {
+      gameId: this.match.id,
+      roomId: this.roomId,
+      redPlayerUsername,
+      bluePlayerUsername
+    });
   }
 
   public async startGame(): Promise<void> {
@@ -187,8 +189,19 @@ export class Game {
     const newWinnerElo = Math.round(winnerProfile.elo + K * (1 - expectedWin));
     const newLoserElo = Math.round(loserProfile.elo + K * (0 - expectedLose));
 
-    playerService.updateElo(winnerProfile.id, newWinnerElo);
-    playerService.updateElo(loserProfile.id, newLoserElo);
+    playerService.updateElo(winnerProfile.username, newWinnerElo);
+    playerService.updateElo(loserProfile.username, newLoserElo);
+
+    // Update the cached profiles
+    this.redProfile.elo = winner === "red" ? newWinnerElo : newLoserElo;
+    this.blueProfile.elo = winner === "blue" ? newWinnerElo : newLoserElo;
+
+    const redSocket = this.io.sockets.sockets.get(this.match.red_player);
+    const blueSocket = this.io.sockets.sockets.get(this.match.blue_player);
+
+    // Send correct profile to each player
+    if (redSocket) redSocket.emit("profile", this.redProfile);
+    if (blueSocket) blueSocket.emit("profile", this.blueProfile);
 
     logger.info("Elo updated", {
       winner: winnerProfile.username,
@@ -197,6 +210,7 @@ export class Game {
       newLoserElo
     });
   }
+
   private async cleanup(): Promise<void> {
     const redSocket = this.io.sockets.sockets.get(this.match.red_player);
     const blueSocket = this.io.sockets.sockets.get(this.match.blue_player);

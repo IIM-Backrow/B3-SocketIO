@@ -6,6 +6,7 @@ class HandTracker {
     this.physicalHands = [];
 
     this.onHandsMoveCallback = null;
+    this.isEnabled = true;
   }
 
   preload() {
@@ -22,7 +23,20 @@ class HandTracker {
     this.handPose.detectStart(this.video, this.gotHands.bind(this));
   }
 
+  enable() {
+    this.isEnabled = true;
+  }
+
+  disable() {
+    this.isEnabled = false;
+    this.physicalHands = [];
+    this.handsElement.forEach((hand) => hand.remove());
+    this.handsElement = [];
+  }
+
   draw() {
+    if (!this.isEnabled) return;
+
     // Remove hand elements that are no longer in the physical hands
     while (this.handsElement.length > this.physicalHands.length) {
       this.handsElement[this.handsElement.length - 1].remove();
@@ -50,6 +64,11 @@ class HandTracker {
   }
 
   gotHands(hands) {
+    if (!this.isEnabled) {
+      this.physicalHands = [];
+      return;
+    }
+
     // image(this.video, 0, 0, width, height);
     background(255);
 

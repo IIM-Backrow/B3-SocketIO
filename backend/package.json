@@ -9,13 +9,12 @@
     "start": "node dist/index.js",
     "format": "prettier --write .",
     "lint": "npm run lint:eslint && npm run lint:prettier",
-    "lint:eslint": "eslint src/**/*.ts",
+    "lint:eslint": "eslint",
     "lint:prettier": "prettier --check ."
   },
   "author": "Kan-A-Pesh",
   "private": true,
   "dependencies": {
-    "@types/uuid": "^10.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
@@ -24,6 +23,7 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@types/uuid": "^10.0.0",
     "@eslint/js": "^9.22.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",

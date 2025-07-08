@@ -1,0 +1,215 @@
+/* Login Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Initially hide login modal */
+#login-modal {
+  display: none;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+  min-width: 300px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#username-input {
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+#username-input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+#login-form button {
+  padding: 0.75rem;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#login-form button:hover {
+  background-color: #1976d2;
+}
+
+/* Ping Display */
+#ping-display {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background-color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  font-family: monospace;
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+#ping-text.good {
+  color: #4caf50; /* Green */
+}
+
+#ping-text.warning {
+  color: #ff9800; /* Orange */
+}
+
+#ping-text.bad {
+  color: #f44336; /* Red */
+}
+
+/* Profile Display */
+#profile-display {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 100;
+  min-width: 200px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#profile-username {
+  font-weight: bold;
+  color: #333;
+}
+
+#profile-elo {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+#logout-button {
+  padding: 0.5rem 1rem;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#logout-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Bottom Drawer */
+#bottom-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+  display: flex;
+  justify-content: center;
+  z-index: 200;
+}
+
+#play-button {
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Play button states */
+#play-button.ready {
+  background-color: #2196f3;
+  color: white;
+}
+
+#play-button.ready:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+}
+
+#play-button.waiting {
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+}
+
+#play-button.waiting:hover {
+  background-color: #555;
+}
+
+#play-button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Hidden state */
+.modal.hidden {
+  display: none;
+}
+
+#profile-display.hidden {
+  display: none;
+}
+
+#bottom-drawer.hidden {
+  display: none;
+}
