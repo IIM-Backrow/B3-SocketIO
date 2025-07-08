@@ -11,4 +11,92 @@
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+#main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+
+  #join-queue {
+    width: 200px;
+    height: 50px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #1976D2;
+    }
+
+    &:disabled {
+      background-color: #B0BEC5;
+      cursor: not-allowed;
+    }
+  }
+
+  #leave-queue {
+    width: 200px;
+    height: 50px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #d13431;
+    }
+
+    &:disabled {
+      background-color: #B0BEC5;
+      cursor: not-allowed;
+    }
+  }
+
+  #leave-game {
+    width: 200px;
+    height: 50px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #d13431;
+    }
+
+    &:disabled {
+      background-color: #B0BEC5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+#informative-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
 }
