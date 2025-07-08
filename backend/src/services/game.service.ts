@@ -29,8 +29,16 @@ export class Game {
     this.roomId = `game-${uuidv4()}`;
 
     const playerService = PlayerService.getInstance();
-    this.redProfile = playerService.getProfileBySocket(redPlayer)!;
-    this.blueProfile = playerService.getProfileBySocket(bluePlayer)!;
+    const redProfile = playerService.getProfileBySocket(redPlayer);
+    if (!redProfile) {
+      throw new Error(`Red player profile not found for socket ID: ${redPlayer}`);
+    }
+    this.redProfile = redProfile;
+    const blueProfile = playerService.getProfileBySocket(bluePlayer);
+    if (!blueProfile) {
+      throw new Error(`Blue player profile not found for socket ID: ${bluePlayer}`);
+    }
+    this.blueProfile = blueProfile;
 
     this.match = {
       id: uuidv4(),
