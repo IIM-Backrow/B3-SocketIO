@@ -9,6 +9,9 @@ export interface ServerToClientEvents {
   // Game events
   game_update: (game_state: GameState) => void;
   game_end: (winner: Color) => void;
+
+
+  profile: (profile: import("./player").PlayerProfile) => void;
 }
 
 export interface ClientToServerEvents {
@@ -20,6 +23,9 @@ export interface ClientToServerEvents {
 
   // Game events
   place_piece: (column: number) => void;
+
+  login: (username: string) => void;
+
 }
 
 export interface InterServerEvents {}

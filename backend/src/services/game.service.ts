@@ -8,6 +8,8 @@ import {
   InterServerEvents,
   SocketData
 } from "../../../shared/types/socket-events";
+import { PlayerService } from "./player.service";
+import { PlayerProfile } from "../../../shared/types/player";
 
 const logger = createFeatureLogger("game.service");
 
@@ -15,6 +17,8 @@ export class Game {
   private match: Match;
   private io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>;
   private roomId: string;
+  private redProfile: PlayerProfile;
+  private blueProfile: PlayerProfile;
 
   constructor(
     io: Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,
@@ -23,6 +27,10 @@ export class Game {
   ) {
     this.io = io;
     this.roomId = `game-${uuidv4()}`;
+
+    const playerService = PlayerService.getInstance();
+    this.redProfile = playerService.getProfileBySocket(redPlayer)!;
+    this.blueProfile = playerService.getProfileBySocket(bluePlayer)!;
 
     this.match = {
       id: uuidv4(),
@@ -162,9 +170,37 @@ export class Game {
   private endGame(winner: Color): void {
     this.io.to(this.roomId).emit("game_end", winner);
     logger.info("Fin de partie", { winner, gameId: this.match.id });
+
+    this.updateElo(winner);
     this.cleanup();
   }
+  
+  private updateElo(winner: Color): void {
+    const playerService = PlayerService.getInstance();
+    const K = 32;
+    const [winnerProfile, loserProfile] =
+      winner === "red"
+        ? [this.redProfile, this.blueProfile]
+        : [this.blueProfile, this.redProfile];
 
+    const expectedWin =
+      1 / (1 + Math.pow(10, (loserProfile.elo - winnerProfile.elo) / 400));
+    const expectedLose =
+      1 / (1 + Math.pow(10, (winnerProfile.elo - loserProfile.elo) / 400));
+
+    const newWinnerElo = Math.round(winnerProfile.elo + K * (1 - expectedWin));
+    const newLoserElo = Math.round(loserProfile.elo + K * (0 - expectedLose));
+
+    playerService.updateElo(winnerProfile.id, newWinnerElo);
+    playerService.updateElo(loserProfile.id, newLoserElo);
+
+    logger.info("Elo updated", {
+      winner: winnerProfile.username,
+      newWinnerElo,
+      loser: loserProfile.username,
+      newLoserElo
+    });
+  }
   private async cleanup(): Promise<void> {
     const redSocket = this.io.sockets.sockets.get(this.match.red_player);
     const blueSocket = this.io.sockets.sockets.get(this.match.blue_player);
