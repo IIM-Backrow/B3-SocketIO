@@ -25,15 +25,17 @@ B3-SocketIO/
 
 ## 🚀 Quick Start
 
-1. **Backend**: See [Backend Documentation](./docs/backend/README.md) for setup and development
-2. **Frontend**: See [Frontend Documentation](./docs/frontend/README.md) for setup and features
-3. **Full Documentation**: Browse the [Documentation Index](./docs/README.md) for comprehensive guides
+1. **🐳 Docker (Recommended)**: See [Docker Setup](./docs/DOCKER.md) for containerized deployment
+2. **⚡ Backend**: See [Backend Documentation](./docs/backend/README.md) for setup and development
+3. **🎨 Frontend**: See [Frontend Documentation](./docs/frontend/README.md) for setup and features
+4. **📚 Full Documentation**: Browse the [Documentation Index](./docs/README.md) for comprehensive guides
 
 ## 📚 Documentation
 
 - **[📖 Documentation Index](./docs/README.md)** - Navigate all documentation by component
 - **[🎨 Frontend Guide](./docs/frontend/README.md)** - Frontend setup and features
 - **[⚡ Backend Guide](./docs/backend/README.md)** - Backend architecture and development
+- **[🐳 Docker Setup](./docs/DOCKER.md)** - Containerized deployment with Docker
 
 ## 🤝 Contributing
 
