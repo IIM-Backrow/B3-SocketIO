@@ -37,7 +37,7 @@ export class Game {
     const redSocket = this.io.sockets.sockets.get(this.match.red_player);
     const blueSocket = this.io.sockets.sockets.get(this.match.blue_player);
     if (!redSocket || !blueSocket) {
-      logger.warn("Un ou les deux joueurs sont déconnectés au démarrage de la partie", {
+      logger.warn("One or both players are disconnected at the start of the game", {
         red: !!redSocket,
         blue: !!blueSocket,
         gameId: this.match.id
