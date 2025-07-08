@@ -102,18 +102,48 @@ export class MatchmakingHandler {
     const matchedPlayers = this.queueService.getMatchedPlayers();
 
     if (matchedPlayers) {
-      const [player1, player2] = matchedPlayers;
+      const [player1SocketId, player2SocketId] = matchedPlayers;
+
+      // Get socket instances to access usernames
+      const player1Socket = initiatingSocket.nsp.sockets.get(player1SocketId);
+      const player2Socket = initiatingSocket.nsp.sockets.get(player2SocketId);
+
+      if (!player1Socket || !player2Socket) {
+        logger.error("Cannot find socket instances for matched players", {
+          player1SocketId,
+          player2SocketId
+        });
+        return;
+      }
+
+      // Get usernames from socket data
+      const player1Username = player1Socket.data.username;
+      const player2Username = player2Socket.data.username;
+
+      if (!player1Username || !player2Username) {
+        logger.error("Players not logged in - missing usernames", {
+          player1SocketId,
+          player2SocketId,
+          player1Username,
+          player2Username
+        });
+        return;
+      }
 
       logger.info("Creating new game", {
-        player1,
-        player2
+        player1SocketId,
+        player2SocketId,
+        player1Username,
+        player2Username
       });
 
-      // Create new game instance
+      // Create new game instance using usernames but also store socket IDs
       const game = new Game(
         initiatingSocket.nsp.server,
-        player1, // red player
-        player2 // blue player
+        player1SocketId, // Still need socket ID for game operations
+        player2SocketId,
+        player1Username, // Pass usernames for ELO
+        player2Username
       );
 
       // Store the game
@@ -125,8 +155,8 @@ export class MatchmakingHandler {
       logger.info("Game started successfully", {
         gameId: game.getGameId(),
         roomId: game.getRoomId(),
-        redPlayer: player1,
-        bluePlayer: player2
+        redPlayer: player1Username,
+        bluePlayer: player2Username
       });
     }
   }

@@ -1,7 +1,7 @@
 class Board {
   constructor() {
     this.board = [];
-    this.currentPlayer = 1;
+    this.currentPlayer = null; // Will be managed by server
 
     // Generate dom
     this.boardContainer = document.createElement("div");
@@ -18,12 +18,12 @@ class Board {
         cells: [],
       });
 
-      // Generate cells
+      // Generate cells (bottom to top order to match server)
       for (let j = 0; j < 6; j++) {
         const cell = document.createElement("div");
         cell.classList.add("cell");
         row.appendChild(cell);
-        this.board[i].cells.unshift({
+        this.board[i].cells.push({
           element: cell,
           value: null,
         });
@@ -31,90 +31,72 @@ class Board {
     }
   }
 
-  tryAddPiece(col) {
-    if (this.currentPlayer === 0) return;
-    const index = this.board[col].cells.findIndex(
-      (cell) => cell.value === null
-    );
-    const cell = index !== -1 ? this.board[col].cells[index] : null;
-
-    if (cell === null) return;
-
-    cell.value = this.currentPlayer;
-
-    const cellContent = document.createElement("div");
-    cellContent.classList.add("cell-content");
-    cellContent.style.setProperty(
-      "--cell-color",
-      this.currentPlayer === 1 ? "blue" : "red"
-    );
-
-    // Calculate the fall distance
-    const fallDistance =
-      this.board[col].cells.filter((cell) => cell.value === null).length + 2;
-    cellContent.style.setProperty("--fall-cells", fallDistance);
-
-    cell.element.appendChild(cellContent);
-
-    // Set the current player to 0 to prevent adding another piece
-    const currentPlayerTmp = this.currentPlayer;
-    this.currentPlayer = 0;
-
-    const timeout = fallDistance * 200 + 200;
-
-    if (this.checkWin(col, index)) {
-      setTimeout(() => {
-        startWinAnimation(currentPlayerTmp === 1 ? "blue" : "red");
-      }, timeout);
+  // Update board state from server game state
+  updateFromGameState(gameState) {
+    // Validate gameState structure
+    if (!gameState || !gameState.board || !Array.isArray(gameState.board)) {
+      console.error("Invalid gameState received:", gameState);
       return;
     }
 
-    // Start the turn animation
-    setTimeout(() => {
-      startTurnAnimation(currentPlayerTmp === 1 ? "red" : "blue");
+    this.currentPlayer = gameState.turn;
 
-      // Wait for the animation to set turn
-      setTimeout(() => {
-        this.currentPlayer = currentPlayerTmp === 1 ? 2 : 1;
-      }, 1000);
-    }, timeout);
-  }
+    // Clear current board visual
+    for (let col = 0; col < 7; col++) {
+      for (let row = 0; row < 6; row++) {
+        const cell = this.board[col].cells[row];
+        cell.element.innerHTML = "";
 
-  checkWin(col, row) {
-    // return a boolean of the win state
-    const ca = {
-      x: col,
-      y: row,
-      value: this.board[col].cells[row].value,
-    };
+        // Try direct mapping (no reversal) to debug
+        const boardRow = gameState.board[row];
+        if (boardRow && Array.isArray(boardRow) && col < boardRow.length) {
+          cell.value = boardRow[col];
+        } else {
+          // Default to null if accessing outside bounds
+          cell.value = null;
+          if (col === 0 && row === 0) {
+            console.warn(
+              "Server board structure mismatch. Expected 6x7 (rows x cols). Received:",
+              gameState.board
+            );
+          }
+        }
 
-    const countWin = (x, y) => {
-      return (
-        this.countDirection(ca, x, y) + this.countDirection(ca, -x, -y) + 1 >= 4
-      );
-    };
-    return (
-      countWin(1, 0) || countWin(0, 1) || countWin(1, 1) || countWin(1, -1)
-    );
-  }
-
-  countDirection(ca, x, y) {
-    let count = 0;
-    let i = ca.x + x;
-    let j = ca.y + y;
-
-    while (
-      i >= 0 &&
-      i < 7 &&
-      j >= 0 &&
-      j < 6 &&
-      this.board[i].cells[j].value == ca.value
-    ) {
-      count++;
-      i += x;
-      j += y;
+        // Add piece visual if there's a piece
+        if (cell.value) {
+          const cellContent = document.createElement("div");
+          cellContent.classList.add("cell-content");
+          cellContent.style.setProperty("--cell-color", cell.value);
+          // No animation for server updates (pieces are already placed)
+          cellContent.style.setProperty("--fall-cells", 0);
+          cell.element.appendChild(cellContent);
+        }
+      }
     }
-    return count;
+  }
+
+  // Local piece placement (for visual feedback, actual logic is server-side)
+  tryAddPiece(col) {
+    const gameState = window.gameState;
+
+    // Check if player can place a piece
+    if (!gameState.isInGame() || !gameState.isMyTurn()) {
+      console.log("Cannot place piece: not in game or not my turn");
+      return;
+    }
+
+    // Find the first empty cell from top (direct mapping test)
+    const index = this.board[col].cells.findIndex(
+      (cell) => cell.value === null
+    );
+
+    if (index === -1) {
+      console.log("Column is full");
+      return;
+    }
+
+    // Send the move to the server (server will handle the placement and send update)
+    gameState.placePiece(col);
   }
 }
 
@@ -126,8 +108,15 @@ placeholder.classList.add("placeholder");
 placeholder.style.display = "none";
 document.body.appendChild(placeholder);
 
+// Expose board instance to window for socket integration
+window.board = board;
+
 handTracker.onHandsMove((hands) => {
-  if (hands.length === 0 || board.currentPlayer === 0) {
+  // Check if player is in game and if it's their turn
+  const gameState = window.gameState;
+  const canPlay = gameState && gameState.isInGame() && gameState.isMyTurn();
+
+  if (hands.length === 0 || !canPlay) {
     placeholder.style.display = "none";
     return;
   }
@@ -163,9 +152,32 @@ handTracker.onHandsMove((hands) => {
     board.tryAddPiece(col.index);
   }
 
-  placeholder.style.setProperty(
-    "--cell-color",
-    board.currentPlayer === 1 ? "blue" : "red"
-  );
+  // Show placeholder with current player's color
+  const myColor = gameState.getMyColor();
+  placeholder.style.setProperty("--cell-color", myColor || "blue");
   placeholder.style.left = `${col.elementCenterX}px`;
 });
+
+// Function to update hand tracking state based on game conditions
+function updateHandTrackingState() {
+  const gameState = window.gameState;
+
+  if (!gameState) {
+    handTracker.disable();
+    placeholder.style.display = "none";
+    return;
+  }
+
+  const canPlay =
+    gameState.isInGame() && gameState.isMyTurn() && gameState.isLoggedIn();
+
+  if (canPlay) {
+    handTracker.enable();
+  } else {
+    handTracker.disable();
+    placeholder.style.display = "none";
+  }
+}
+
+// Check hand tracking state periodically
+setInterval(updateHandTrackingState, 100);

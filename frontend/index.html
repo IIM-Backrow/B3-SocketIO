@@ -23,13 +23,44 @@
     <link rel="stylesheet" href="style/style.css" />
   </head>
   <body>
-    <div id="main-container">
-    <div id="button-container">
-      <button id="join-queue"> Join Queue </button>
-      <button disabled id="leave-queue"> Leave Queue </button>
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+      <div class="modal-content">
+        <h2>Welcome to ConnectFOUR</h2>
+        <p>Enter your username to start playing:</p>
+        <form id="login-form">
+          <input
+            type="text"
+            id="username-input"
+            placeholder="Enter username"
+            required
+          />
+          <button type="submit">Login</button>
+        </form>
+      </div>
     </div>
 
-    <p id="informative-text"> Click on Join Queue to participate </p>
-  </div>
+    <!-- Ping Display -->
+    <div id="ping-display">
+      <span id="ping-text">Ping: -- ms</span>
+    </div>
+
+    <!-- Profile Display -->
+    <div id="profile-display">
+      <div class="profile-info">
+        <span id="profile-username">Guest</span>
+        <span id="profile-elo">ELO: --</span>
+      </div>
+      <button id="logout-button">Logout</button>
+    </div>
+
+    <div id="main-container">
+      <p id="informative-text">Click PLAY to start matchmaking</p>
+    </div>
+
+    <!-- Bottom Drawer -->
+    <div id="bottom-drawer">
+      <button id="play-button">PLAY</button>
+    </div>
   </body>
 </html>

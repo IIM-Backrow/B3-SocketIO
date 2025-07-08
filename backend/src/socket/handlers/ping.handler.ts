@@ -17,17 +17,7 @@ export class PingHandler {
     socket.on(
       "ping",
       withSocketErrorHandling<[number]>(logger, "ping", socket, (timestamp: number) => {
-        logger.info("Received ping from client", {
-          socketId: socket.id,
-          timestamp
-        });
-
-        socket.emit("pong", Date.now());
-
-        logger.info("Sent pong to client", {
-          socketId: socket.id,
-          responseTime: Date.now() - timestamp
-        });
+        socket.emit("pong", timestamp);
       })
     );
   }
