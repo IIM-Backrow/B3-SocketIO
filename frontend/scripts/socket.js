@@ -2,7 +2,7 @@ const joinQueueButton = document.getElementById("join-queue");
 const leaveQueueButton = document.getElementById("leave-queue");
 const informativeText = document.getElementById("informative-text");
 
-socket = io("http://localhost:3000");
+const socket = io("http://localhost:3000");
 socket.on("connect", () => {
   console.log("Connected to the server");
   socket.emit("ping");
